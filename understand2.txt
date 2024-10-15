@@ -1,0 +1,70 @@
+enviourment variables:
+we have created env variable in docker file for the port
+*creating a new docker file
+- docker run -v ${pwd}:/app:ro -v /app/<file_name> --env PORT=3000 3000:3000 -d --name <container_name> <image_name>
+
+docker compose:
+we will write parameters separately instead of writing big command lines
+
+we have to create the docker file, it will automatically create the image and container
+- docker-compose up -d 
+it will name the container and image related to the project name
+
+removing container:
+- docker-compose down
+- docker-compose down -v
+
+what if we want to build a new image:
+->  --build (add this while building the docker)
+
+dev and prod enviourment:
+dev does not contain build command and have volumes and run the nodemon whereas prod doesnt run nodemon
+
+
+run dev enviourment command:
+- docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d
+
+run prod enviourment:
+- docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d
+
+website reflect changes directly on wepages in dev but in prod it doesnt
+
+
+we add this code in dockerfile:
+-   ARG NODE_ENV
+RUN if [ "$NODE_ENV" = "development" ]; \
+then npm install; \
+else npm install --only=production; \
+fi
+
+this above code tell to install depeendecy from package.json separately for prod
+
+
+#################################
+setup mongodb with express and docker-
+
+- docker exec -it container_name bash
+- cd bin # mongo shell is availble inside bin by default
+- mongosh -u "root" -p "root"
+#
+- docker exec -it container_name /bin/mongosh -u "root" -p "root"
+The commands allow you to access the MongoDB container, navigate to its bin directory, and start the MongoDB Shell with the specified credentials.
+#
+
+inside bin:
+- use database_name ;
+it will create a new database 
+
+- db.createcollection("employees"); # it will create collections
+- show collections; # it will show all the collection inside the database
+
+##################################################################
+mongoose:
+connect moongose in server.js file 
+now build the container and find the ipaddrees in moongo using inspect and connect it in server.js file
+
+to find the ip address through command:
+- docker inspect container_name 
+
+when you connect thorugh the ip a problem rises that if the container goes down and build again the ip is changed
+to solve this instead of writing the ip adress we write the image name (ex-mongo provided in docker-compose.yaml)

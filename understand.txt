@@ -1,0 +1,62 @@
+- docker build -t <image_name> .  
+to build docker image
+
+docker:
+creates a virtual enviourment and stores in a container
+if you make change in response than it will only make changes in virtual model and does not in local file,
+to make changes in virtual through local we have enable syncing
+
+.dockerignore
+it ignores all the file written in this file and does not include in virtual docker enviourment
+
+- docker run -d -p 5000:3000 --name <container_name> <image_name>
+it will run docker and you can view file in localhost:5000
+
+- docker exec -it <container_name> bash
+it will allow you to enter the docker virtual enviourment
+container name is not same as image name( refer docker desktop )
+
+- docker remove <container_name> -f
+used to forcefully remove dockercontainer not image-name-file
+to create again run docker command again
+
+printing files in docker virtual enviourment
+first go inside the virtual enviourment
+- cat file_name
+
+syncing docker virtual enviourment and local files
+we use volumes to syncing
+there is a specific type of volume know as bind mount
+it syncs the app directory to local modules
+*we are creating new docker
+
+for command prompt -
+- docker run -v %c%:/app -p 3000:5000 -d --name <container_name> <image_name>
+
+for powershell -
+- docker run -v ${pwd}:/app -p 3000:5000 -d --name <container_name> <image_name>
+
+
+after syncing the server always has to restart to reflect changes 
+to avoid this install nodemon
+before running server like - npm start 
+include start in package.json
+
+anonmyous  volume:
+- docker run -v ${pwd}:/app -v /app/<file_name> -p 3000:3000 -d --name <container_name> <image_name>
+it wont sync file_name
+
+read only:
+so person can perform task in docker but will not able to make changes in docker
+- docker run -v ${pwd}:/app:ro -v /app/<file_name> -p 3000:3000 -d --name <container_name> <image_name>
+
+add ro while creating docker, yo will not be able to create any directory in app but inside the like in node_modules you can create
+
+checking volume:
+- docker volume ls
+
+
+- docker volume prune
+
+delete container and volume:
+docker rm <container_name> -fv
